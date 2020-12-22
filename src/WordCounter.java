@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -7,6 +8,7 @@ import java.util.Scanner;
 public class WordCounter
 {
 	private int numChapters;
+	private ArrayList<Integer> wordsByChapter = new ArrayList<>();
 	private int numWords;
 	private int numCharacters;
 	private Map<String, Integer> wordMap = new HashMap<String, Integer>();
@@ -22,7 +24,7 @@ public class WordCounter
 		int chapter = 1;
 		while(true)
 		{
-			StringBuilder novel = new StringBuilder();
+			StringBuilder chapterTxt = new StringBuilder();
 			String path = dir + "/Chapter_" + String.valueOf(chapter) + ".txt";
 			try
 			{
@@ -31,9 +33,9 @@ public class WordCounter
 				while (myReader.hasNextLine())
 				{
 					String data = myReader.nextLine();
-					novel.append(data);
+					chapterTxt.append(data);
 				}
-				analyzeTxt(novel.toString());
+				analyzeTxt(chapterTxt.toString());
 				myReader.close();
 			}
 			catch (FileNotFoundException e)
@@ -50,6 +52,7 @@ public class WordCounter
 
 	private void analyzeTxt(String novel)
 	{
+		wordsByChapter.add(novel.length());
 		numCharacters = numCharacters + novel.length();
 		String[] allWords = novel.split("\\s+");
 		for (String s : allWords)
@@ -93,6 +96,8 @@ public class WordCounter
 		System.out.println("Chapters:\t" + String.valueOf(numChapters));
 		System.out.println("Words:\t" + String.valueOf(numWords));
 		System.out.println("Characters:\t" + String.valueOf(numCharacters));
+		for(int i = 0; i < wordsByChapter.size(); i++)
+			System.out.println("Words in Chapter #" + String.valueOf(i + 1) + ":\t" + String.valueOf(wordsByChapter.get(i)));
 		System.out.println("Most Used Words:\t" + getMostUsedString());
 	}
 
