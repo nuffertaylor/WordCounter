@@ -1,9 +1,5 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class WordCounter
 {
@@ -12,14 +8,17 @@ public class WordCounter
 	private int numWords;
 	private int numCharacters;
 	private Map<String, Integer> wordMap = new HashMap<String, Integer>();
+	private String dir;
+	final String LOG_FILE = "/wordHistory.txt";
 
 	public WordCounter(String dir)
 	{
-		analyzeTxtFiles(dir);
+		this.dir = dir;
+		analyzeTxtFiles();
 		printResults();
 	}
 
-	private void analyzeTxtFiles(String dir)
+	private void analyzeTxtFiles()
 	{
 		int chapter = 1;
 		while(true)
@@ -93,12 +92,34 @@ public class WordCounter
 
 	public void printResults()
 	{
-		System.out.println("Chapters:\t" + String.valueOf(numChapters));
-		System.out.println("Words:\t" + String.valueOf(numWords));
-		System.out.println("Characters:\t" + String.valueOf(numCharacters));
+		StringBuilder results = new StringBuilder();
+
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+
+		results.append("\n=======================================\n");
+		results.append("Results " + today.getTime());
+		results.append("\n");
+		results.append("Chapters:\t" + String.valueOf(numChapters));
+		results.append("\n");
+		results.append("Words:\t" + String.valueOf(numWords));
+		results.append("\n");
+		results.append("Characters:\t" + String.valueOf(numCharacters));
 		for(int i = 0; i < wordsByChapter.size(); i++)
-			System.out.println("Words in Chapter #" + String.valueOf(i + 1) + ":\t" + String.valueOf(wordsByChapter.get(i)));
-		System.out.println("Most Used Words:\t" + getMostUsedString());
+			results.append("\nWords in Chapter #" + String.valueOf(i + 1) + ":\t" + String.valueOf(wordsByChapter.get(i)));
+		results.append("\n");
+		results.append("Most Used Words:\t" + getMostUsedString());
+		results.append("\n=======================================");
+		try
+		{
+			File log = new File(dir + LOG_FILE);
+			if (!log.exists()) log.createNewFile();
+			Writer outputWriter = new BufferedWriter(new FileWriter(dir + LOG_FILE, true));
+			outputWriter.write(results.toString());
+			outputWriter.close();
+		}
+		catch (Exception e) {e.printStackTrace();}
+		System.out.println(results.toString());
 	}
 
 	public static void main (String[] args)
