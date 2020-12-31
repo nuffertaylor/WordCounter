@@ -83,6 +83,18 @@ public class WordCounter
 				numTimesUsed = entry.getValue();
 				mostUsedWord = entry.getKey();
 			}
+			else if (entry.getValue() > numTimesSecondUsed)
+			{
+				thirdMostUsed = secondMostUsed;
+				numTimesThirdUsed = numTimesSecondUsed;
+				secondMostUsed = entry.getKey();
+				numTimesSecondUsed = entry.getValue();
+			}
+			else if (entry.getValue() > numTimesThirdUsed)
+			{
+				thirdMostUsed = entry.getKey();
+				numTimesThirdUsed = entry.getValue();
+			}
 		}
 		String s1 = mostUsedWord + " (used " + String.valueOf(numTimesUsed) + " times), ";
 		String s2 = secondMostUsed + " (used " + String.valueOf(numTimesSecondUsed) + " times), ";
