@@ -51,9 +51,9 @@ public class WordCounter
 
 	private void analyzeTxt(String novel)
 	{
-		wordsByChapter.add(novel.length());
 		numCharacters = numCharacters + novel.length();
 		String[] allWords = novel.split("\\s+");
+		wordsByChapter.add(allWords.length);
 		for (String s : allWords)
 		{
 			if (wordMap.containsKey(s))
